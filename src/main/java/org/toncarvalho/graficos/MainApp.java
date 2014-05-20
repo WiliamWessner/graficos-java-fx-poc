@@ -10,6 +10,7 @@ import javafx.scene.chart.BarChart;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.ScatterChart;
+import javafx.scene.chart.StackedAreaChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToolBar;
@@ -121,12 +122,40 @@ public class MainApp extends Application {
             }
         });
 
+
+        Button btnAreaEmpilhada = new Button(("Área Empilhada"));
+        btnAreaEmpilhada.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(final ActionEvent actionEvent) {
+                buildGraficoAreaEmpilhada();
+            }
+        });
+
         ToolBar toolBar = new ToolBar();
         toolBar.getItems()
-               .addAll(btnArea, btnBarras, btnDispersao, btnLinhas, btnPizza, btn);
+               .addAll(btnAreaEmpilhada, btnArea, btnBarras, btnDispersao, btnLinhas, btnPizza, btn);
         toolBar.setOrientation(Orientation.VERTICAL);
 
         return toolBar;
+    }
+
+    private void buildGraficoAreaEmpilhada() {
+        GraficoAreaEmpilhada grafico = new GraficoAreaEmpilhada();
+
+        StackedAreaChart myChart = grafico.montaGrafico();
+        myChart.setTitle("Exemplo de gráfico de Area Empilhada");
+        myChart.setMinSize(1280, 720);
+
+        AnchorPane pane = new AnchorPane();
+        pane.setMinSize(1280, 720);
+        pane.getChildren().add(myChart);
+        pane.getChildren().add(getBbtnVoltar());
+
+        Scene chartScene = new Scene(pane);
+
+        this.lastScene = this.stage.getScene();
+        this.stage.setScene(chartScene);
+        this.stage.setMaximized(true);
     }
 
     private void buildGraficoArea() {
