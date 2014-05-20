@@ -5,6 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
+import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.PieChart;
@@ -17,7 +18,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 /**
- * Created by ton on 5/19/14.
+ *
  */
 public class MainApp extends Application {
 
@@ -80,44 +81,72 @@ public class MainApp extends Application {
             }
         });
 
-        Button btnGrafico1 = new Button("Pizza");
-        btnGrafico1.setOnAction(new EventHandler<ActionEvent>() {
+        Button btnPizza = new Button("Pizza");
+        btnPizza.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(final ActionEvent actionEvent) {
                 buildGrafico1();
             }
         });
 
-        Button btnGraficoLinhas = new Button("Linhas");
-        btnGraficoLinhas.setOnAction(new EventHandler<ActionEvent>() {
+        Button btnLinhas = new Button("Linhas");
+        btnLinhas.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(final ActionEvent actionEvent) {
                 buildGraficoLinhas();
             }
         });
 
-        Button btnGraficoDispersao = new Button(("Dispersão"));
-        btnGraficoDispersao.setOnAction(new EventHandler<ActionEvent>() {
+        Button btnDispersao = new Button(("Dispersão"));
+        btnDispersao.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(final ActionEvent actionEvent) {
                 buildGraficoDispersao();
             }
         });
 
-        Button btnGraficoBarras = new Button(("Barras"));
-        btnGraficoBarras.setOnAction(new EventHandler<ActionEvent>() {
+        Button btnBarras = new Button(("Barras"));
+        btnBarras.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(final ActionEvent actionEvent) {
                 buildGraficoBarras();
             }
         });
 
+        Button btnArea = new Button(("Área"));
+        btnArea.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(final ActionEvent actionEvent) {
+                buildGraficoArea();
+            }
+        });
+
         ToolBar toolBar = new ToolBar();
         toolBar.getItems()
-               .addAll(btnGraficoBarras, btnGraficoDispersao, btnGraficoLinhas, btnGrafico1, btn);
+               .addAll(btnArea, btnBarras, btnDispersao, btnLinhas, btnPizza, btn);
         toolBar.setOrientation(Orientation.VERTICAL);
 
         return toolBar;
+    }
+
+    private void buildGraficoArea() {
+
+        GraficoArea grafico = new GraficoArea();
+
+        AreaChart myChart = grafico.montaGrafico();
+        myChart.setTitle("Exemplo de gráfico de área");
+        myChart.setMinSize(1280, 720);
+
+        AnchorPane pane = new AnchorPane();
+        pane.setMinSize(1280, 720);
+        pane.getChildren().add(myChart);
+        pane.getChildren().add(getBbtnVoltar());
+
+        Scene chartScene = new Scene(pane);
+
+        this.lastScene = this.stage.getScene();
+        this.stage.setScene(chartScene);
+        this.stage.setMaximized(true);
     }
 
     private void buildGraficoBarras() {
