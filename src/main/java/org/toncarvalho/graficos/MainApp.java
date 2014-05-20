@@ -5,8 +5,10 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
+import javafx.scene.chart.BarChart;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.PieChart;
+import javafx.scene.chart.ScatterChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToolBar;
@@ -78,7 +80,7 @@ public class MainApp extends Application {
             }
         });
 
-        Button btnGrafico1 = new Button("Gráfico de Pizza");
+        Button btnGrafico1 = new Button("Pizza");
         btnGrafico1.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(final ActionEvent actionEvent) {
@@ -86,7 +88,7 @@ public class MainApp extends Application {
             }
         });
 
-        Button btnGraficoLinhas = new Button("Gráfico de Linhas");
+        Button btnGraficoLinhas = new Button("Linhas");
         btnGraficoLinhas.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(final ActionEvent actionEvent) {
@@ -94,11 +96,64 @@ public class MainApp extends Application {
             }
         });
 
+        Button btnGraficoDispersao = new Button(("Dispersão"));
+        btnGraficoDispersao.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(final ActionEvent actionEvent) {
+                buildGraficoDispersao();
+            }
+        });
+
+        Button btnGraficoBarras = new Button(("Barras"));
+        btnGraficoBarras.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(final ActionEvent actionEvent) {
+                buildGraficoBarras();
+            }
+        });
+
         ToolBar toolBar = new ToolBar();
-        toolBar.getItems().addAll(btnGraficoLinhas, btnGrafico1, btnFullscreenOn, btnFullscreenOff, btn);
+        toolBar.getItems()
+               .addAll(btnGraficoBarras, btnGraficoDispersao, btnGraficoLinhas, btnGrafico1, btn);
         toolBar.setOrientation(Orientation.VERTICAL);
 
         return toolBar;
+    }
+
+    private void buildGraficoBarras() {
+        GraficoBarras grafico = new GraficoBarras();
+
+        BarChart sc = grafico.montaGrafico();
+        sc.setMinSize(1280, 720);
+
+        AnchorPane pane = new AnchorPane();
+        pane.setMinSize(1280, 720);
+        pane.getChildren().add(sc);
+        pane.getChildren().add(getBbtnVoltar());
+
+        Scene grafico1Scene = new Scene(pane);
+
+        this.lastScene = this.stage.getScene();
+        this.stage.setScene(grafico1Scene);
+        this.stage.setMaximized(true);
+    }
+
+    private void buildGraficoDispersao() {
+        GraficoDispersao grafico = new GraficoDispersao();
+
+        ScatterChart sc = grafico.montaGrafico();
+        sc.setMinSize(1280, 720);
+
+        AnchorPane pane = new AnchorPane();
+        pane.setMinSize(1280, 720);
+        pane.getChildren().add(sc);
+        pane.getChildren().add(getBbtnVoltar());
+
+        Scene grafico1Scene = new Scene(pane);
+
+        this.lastScene = this.stage.getScene();
+        this.stage.setScene(grafico1Scene);
+        this.stage.setMaximized(true);
     }
 
     private void buildGraficoLinhas() {

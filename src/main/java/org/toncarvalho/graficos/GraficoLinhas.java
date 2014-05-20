@@ -7,6 +7,7 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.paint.Color;
 
 /**
  * Created by ton on 5/19/14.
@@ -23,6 +24,7 @@ public class GraficoLinhas {
 
         x.setGapStartAndEnd(true);
         x.setTickMarkVisible(true);
+        x.setTickLabelFill(Color.CHOCOLATE);
 
         //final NumberAxis x = new NumberAxis();
 
@@ -49,7 +51,7 @@ public class GraficoLinhas {
 
         lineChart.setTitle("Previsão de demanda");
 
-        lineChart.getData().addAll(configSeries(), configSeriesB(), configSeriesC());
+        lineChart.getData().addAll(configSerieDemandaReal(), configSerieDemandaPrevista(), configSerieErroMedio());
 
         lineChart.setLegendSide(Side.TOP);
         lineChart.setLegendVisible(true);
@@ -68,7 +70,7 @@ public class GraficoLinhas {
         return lineChart;
     }
 
-    private XYChart.Series<String, Number> configSeries() {
+    private XYChart.Series<String, Number> configSerieDemandaReal() {
 
         //defining a series
         XYChart.Series series = new XYChart.Series();
@@ -88,30 +90,12 @@ public class GraficoLinhas {
         return series;
     }
 
-    private XYChart.Series<String, Number> configSeriesB() {
+    private XYChart.Series<String, Number> configSerieDemandaPrevista() {
 
         //defining a series
         XYChart.Series series = new XYChart.Series();
 
-        series.setName("Projetada ");
-        //populating the series with data
-
-        MyTimeSeriesA[] dados = MyTimeSeriesA.getTimeSeries();
-
-        for (int i = 0; i < dados.length; i++) {
-
-            series.getData().add(new XYChart.Data(dados[i].ano.toString(), (dados[i].demanda * 1.2)));
-        }
-
-        return series;
-    }
-
-    private XYChart.Series<String, Number> configSeriesC() {
-
-        //defining a series
-        XYChart.Series series = new XYChart.Series();
-
-        series.setName("Projetada II");
+        series.setName("Projetada");
         //populating the series with data
 
         MyTimeSeriesA[] dados = MyTimeSeriesA.getTimeSeries();
@@ -122,8 +106,35 @@ public class GraficoLinhas {
             } else {
                 series.getData().add(new XYChart.Data(dados[i].ano.toString(), (dados[i].demanda * 0.8)));
             }
+        }
+        ///series.getData().add(new XYChart.Data(dados[i].ano.toString(), (dados[i].demanda * 1.2)));
 
-            //        anos.add(dados[i].ano.toString());
+        return series;
+    }
+
+    private XYChart.Series<String, Number> configSerieErroMedio() {
+
+        //defining a series
+        XYChart.Series series = new XYChart.Series();
+
+        series.setName("Erro");
+        //populating the series with data
+
+        MyTimeSeriesA[] dados = MyTimeSeriesA.getTimeSeries();
+        for (int i = 0; i < dados.length; i++) {
+
+            double demandaReal = dados[i].getDemanda();
+            double demandaProjetada = dados[i].getDemanda();
+
+            if (i % 2 == 0) {
+                demandaProjetada = (dados[i].demanda * 0.9);
+            } else {
+                demandaProjetada = (dados[i].demanda * 0.9);
+            }
+
+            double demandaErroMedio = (demandaReal - demandaProjetada);
+
+            series.getData().add(new XYChart.Data(dados[i].ano.toString(), demandaErroMedio));
         }
 
         return series;
