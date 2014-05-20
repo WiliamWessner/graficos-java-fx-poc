@@ -3,6 +3,7 @@ package org.toncarvalho.graficos;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Orientation;
 import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.PieChart;
@@ -95,6 +96,7 @@ public class MainApp extends Application {
 
         ToolBar toolBar = new ToolBar();
         toolBar.getItems().addAll(btnGraficoLinhas, btnGrafico1, btnFullscreenOn, btnFullscreenOff, btn);
+        toolBar.setOrientation(Orientation.VERTICAL);
 
         return toolBar;
     }
@@ -102,16 +104,19 @@ public class MainApp extends Application {
     private void buildGraficoLinhas() {
         GraficoLinhas grafico = new GraficoLinhas();
 
-        LineChart linhas = grafico.montaGrafico();
+        LineChart lineChart = grafico.montaGrafico();
+        lineChart.setMinSize(1280, 720);
 
         AnchorPane pane = new AnchorPane();
-        pane.getChildren().add(linhas);
+        pane.setMinSize(1280, 720);
+        pane.getChildren().add(lineChart);
         pane.getChildren().add(getBbtnVoltar());
 
         Scene grafico1Scene = new Scene(pane);
 
         this.lastScene = this.stage.getScene();
         this.stage.setScene(grafico1Scene);
+        this.stage.setMaximized(true);
     }
 
     private void buildGrafico1() {
@@ -136,7 +141,9 @@ public class MainApp extends Application {
         }
 
         AnchorPane pane = new AnchorPane();
+        pizza.setMinSize(1280, 720);
         pane.getChildren().add(pizza);
+        pane.setMinSize(1280, 720);
         pane.getChildren().add(caption);
         pane.getChildren().add(getBbtnVoltar());
 
